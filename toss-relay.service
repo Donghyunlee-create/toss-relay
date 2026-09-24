@@ -1,0 +1,20 @@
+[Unit]
+Description=Toss Securities read-only Open API relay
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/toss-relay
+EnvironmentFile=/home/ubuntu/toss-relay/.env
+ExecStart=/home/ubuntu/toss-relay/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+# No secrets in journal: uvicorn access log is fine; app never logs tokens
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
