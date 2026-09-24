@@ -1,0 +1,21 @@
+# Option A — your domain (recommended): point A record to the VM public IP, then:
+#   your.domain.example {
+#       reverse_proxy 127.0.0.1:8000
+#   }
+#
+# Option B — free hostname via sslip.io / nip.io (no DNS account needed):
+#   If the VM public IP is 130.162.1.2, use https://130-162-1-2.sslip.io
+#   (or https://130.162.1.2.nip.io). Caddy will obtain a Let's Encrypt cert.
+#
+# Replace the site address below with your domain or sslip.io/nip.io hostname.
+
+{$RELAY_HOSTNAME:130-162-1-2.sslip.io} {
+	reverse_proxy 127.0.0.1:8000
+	encode gzip
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		-Server
+	}
+}
